@@ -1,11 +1,25 @@
 {
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    }
+  },
   "env": {
     "browser": true,
     "es2021": true
   },
   "extends": [
     "plugin:react/recommended",
-    "airbnb"
+    "airbnb",
+    "react-app",
+    "react-app/jest"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -21,6 +35,16 @@
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   }
 }
