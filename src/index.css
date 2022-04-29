@@ -5,10 +5,12 @@
   padding: 0;
 }
 
+h1,
 label {
   font-family: "Segoe UI Bold", sans-serif;
 }
 
-input {
+input,
+p {
   font-family: "Segoe UI Regular", sans-serif;
 }

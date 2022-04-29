@@ -40,38 +40,43 @@ export default function SignUp() {
 
   return (
     <div className={styles['sign-up']}>
-      <Formik
-        initialValues={formInitialValues}
-        onSubmit={onSubmit}
-      >
-        {({ values, handleChange }: FormikProps<SignUpForm>) => (
-          <form className={styles['sign-up__form']}>
-            <label htmlFor="email" className={styles.form__label}>
-              <div>E-mail</div>
-              <input
-                id="email"
-                type="text"
-                className={styles.form__input}
-                onChange={handleChange}
-                value={values.email}
-                placeholder="john_doe@email.com"
-              />
-            </label>
+      <main className={styles['sign-up__main']}>
+        <h1 className={styles['sign-up__title']}>THE LAB 🧪</h1>
+        <Formik initialValues={formInitialValues} onSubmit={onSubmit}>
+          {({ values, handleChange }: FormikProps<SignUpForm>) => (
+            <form>
+              <label htmlFor="email" className={styles.form__label}>
+                <div className={styles['form__label-text']}>
+                  E-mail
+                </div>
+                <input
+                  id="email"
+                  type="text"
+                  className={styles.form__input}
+                  onChange={handleChange}
+                  value={values.email}
+                  placeholder="john_doe@email.com"
+                />
+              </label>
 
-            <label htmlFor="username" className={styles.form__label}>
-              <div>Username</div>
-              <input
-                id="username"
-                type="text"
-                className={styles.form__input}
-                onChange={handleChange}
-                value={values.username}
-                placeholder="john_doe"
-              />
-            </label>
+              <label htmlFor="username" className={styles.form__label}>
+                <div className={styles['form__label-text']}>
+                  Username
+                </div>
+                <input
+                  id="username"
+                  type="text"
+                  className={styles.form__input}
+                  onChange={handleChange}
+                  value={values.username}
+                  placeholder="john_doe"
+                />
+              </label>
 
               <label htmlFor="password" className={styles.form__label}>
-                <div>Password</div>
+                <div className={styles['form__label-text']}>
+                  Password
+                </div>
                 <span className={styles['form__password-input']}>
                   <input
                     id="password"
@@ -84,11 +89,14 @@ export default function SignUp() {
                   {buttonHideOrShowPassword()}
                 </span>
               </label>
+
               <label
                 htmlFor="passwordConfirmation"
                 className={styles.form__label}
               >
-                <div>Password confirmation</div>
+                <div className={styles['form__label-text']}>
+                  Password confirmation
+                </div>
                 <span className={styles['form__password-input']}>
                   <input
                     id="passwordConfirmation"
@@ -104,6 +112,7 @@ export default function SignUp() {
             </form>
           )}
         </Formik>
+      </main>
     </div>
   );
 }

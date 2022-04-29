@@ -6,17 +6,26 @@
   justify-content: center;
 }
 
-.sign-up__form {
+.sign-up__main {
   background-color: #e9d8a6;
   border-radius: 2px;
   padding: 16px;
   width: 20%;
 }
 
+.sign-up__title {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
 .form__label {
   font-family: "Segoe UI Bold", sans-serif;
   display: block;
   margin-bottom: 8px;
+}
+
+.form__label-text {
+  margin-bottom: 4px;
 }
 
 .form__input {
