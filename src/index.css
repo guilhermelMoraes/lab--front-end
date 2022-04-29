@@ -4,3 +4,11 @@
   margin: 0;
   padding: 0;
 }
+
+label {
+  font-family: "Segoe UI Bold", sans-serif;
+}
+
+input {
+  font-family: "Segoe UI Regular", sans-serif;
+}

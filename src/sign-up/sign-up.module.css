@@ -1,0 +1,27 @@
+.sign-up {
+  height: 100vh;
+  background-color: #005f73;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-up__form {
+  background-color: #e9d8a6;
+  border-radius: 2px;
+  padding: 16px;
+  width: 20%;
+}
+
+.form__label {
+  font-family: "Segoe UI Bold", sans-serif;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form__input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 8px;
+}
