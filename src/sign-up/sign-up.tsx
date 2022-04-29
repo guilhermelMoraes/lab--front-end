@@ -84,7 +84,7 @@ export default function SignUp() {
                     className={styles.form__input}
                     onChange={handleChange}
                     value={values.password}
-                    placeholder="#super_secret123"
+                    placeholder="super_secret123"
                   />
                   {buttonHideOrShowPassword()}
                 </span>
@@ -104,7 +104,7 @@ export default function SignUp() {
                     className={styles.form__input}
                     onChange={handleChange}
                     value={values.passwordConfirmation}
-                    placeholder="#super_secret123"
+                    placeholder="super_secret123"
                   />
                   {buttonHideOrShowPassword()}
                 </span>
