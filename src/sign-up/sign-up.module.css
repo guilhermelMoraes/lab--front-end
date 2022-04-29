@@ -20,8 +20,29 @@
 }
 
 .form__input {
-  width: 100%;
   box-sizing: border-box;
   height: 32px;
   padding: 0 8px;
+  display: block;
+  width: 100%;
+}
+
+.form__password-input {
+  display: block;
+  position: relative;
+}
+
+.password-input__button {
+  position: absolute;
+  right: 8px;
+  bottom: 25%;
+  top: 25%;
+  align-self: baseline;
+  border: none;
+  background-color: transparent;
+}
+
+.password-input__svg {
+  height: 16px;
+  width: 16px;
 }
