@@ -28,8 +28,14 @@
   margin-bottom: 4px;
 }
 
+.form__label-error {
+  color: #ae2012;
+  font-size: 16px;
+}
+
 .form__input {
   box-sizing: border-box;
+  font-size: 16px;
   height: 32px;
   padding: 0 8px;
   display: block;
