@@ -11,6 +11,7 @@
   border-radius: 2px;
   padding: 16px;
   width: 20%;
+  box-shadow: 0 0 5px 0 #000;
 }
 
 .sign-up__title {
