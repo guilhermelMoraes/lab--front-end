@@ -47,7 +47,7 @@ export default function SignUp() {
             <form>
               <label htmlFor="email" className={styles.form__label}>
                 <div className={styles['form__label-text']}>
-                  E-mail
+                  E-mail*
                 </div>
                 <input
                   id="email"
@@ -55,13 +55,13 @@ export default function SignUp() {
                   className={styles.form__input}
                   onChange={handleChange}
                   value={values.email}
-                  placeholder="john_doe@email.com"
+                  placeholder="fulano@email.com"
                 />
               </label>
 
               <label htmlFor="username" className={styles.form__label}>
                 <div className={styles['form__label-text']}>
-                  Username
+                  Username*
                 </div>
                 <input
                   id="username"
@@ -69,13 +69,13 @@ export default function SignUp() {
                   className={styles.form__input}
                   onChange={handleChange}
                   value={values.username}
-                  placeholder="john_doe"
+                  placeholder="fulano_silva"
                 />
               </label>
 
               <label htmlFor="password" className={styles.form__label}>
                 <div className={styles['form__label-text']}>
-                  Password
+                  Password*
                 </div>
                 <span className={styles['form__password-input']}>
                   <input
@@ -95,7 +95,7 @@ export default function SignUp() {
                 className={styles.form__label}
               >
                 <div className={styles['form__label-text']}>
-                  Password confirmation
+                  Password confirmation*
                 </div>
                 <span className={styles['form__password-input']}>
                   <input
@@ -112,6 +112,9 @@ export default function SignUp() {
             </form>
           )}
         </Formik>
+        <small>
+          *Campos obrigatórios
+        </small>
       </main>
     </div>
   );

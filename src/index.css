@@ -11,6 +11,7 @@ label {
 }
 
 input,
-p {
+p,
+small {
   font-family: "Segoe UI Regular", sans-serif;
 }
