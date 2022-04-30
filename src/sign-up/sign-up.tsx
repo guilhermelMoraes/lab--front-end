@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { object, string, ref } from 'yup';
 import { Formik, FormikProps } from 'formik';
+import { useState } from 'react';
 import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
-
+import {
+  object, ref, string,
+} from 'yup';
 import styles from './sign-up.module.css';
 import SignUpForm, { Field } from './types';
 
