@@ -4,7 +4,7 @@ import { Formik, FormikProps } from 'formik';
 import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 
 import styles from './sign-up.module.css';
-import SignUpForm from './types';
+import SignUpForm, { Field } from './types';
 
 export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -55,6 +55,33 @@ export default function SignUp() {
     </button>
   );
 
+  const fields: Field[] = [
+    {
+      id: 'email',
+      labelText: 'E-mail*',
+      placeholder: 'fulano@email.com',
+      type: 'text',
+    },
+    {
+      id: 'username',
+      labelText: 'Username*',
+      placeholder: 'fulano_silva',
+      type: 'text',
+    },
+    {
+      id: 'password',
+      labelText: 'Password*',
+      placeholder: 'super_secret#123',
+      type: isPasswordVisible ? 'text' : 'password',
+    },
+    {
+      id: 'passwordConfirmation',
+      labelText: 'Password confirmation*',
+      placeholder: 'super_secret#123',
+      type: isPasswordVisible ? 'text' : 'password',
+    },
+  ];
+
   return (
     <div className={styles['sign-up']}>
       <main className={styles['sign-up__main']}>
@@ -68,94 +95,31 @@ export default function SignUp() {
             values, handleChange, errors, touched, handleBlur,
           }: FormikProps<SignUpForm>) => (
             <form>
-              <label htmlFor="email" className={styles.form__label}>
-                <div className={styles['form__label-text']}>
-                  E-mail*
-                </div>
-                <input
-                  id="email"
-                  type="text"
-                  className={styles.form__input}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.email}
-                  placeholder="fulano@email.com"
-                />
-                {(touched.email && errors.email) && (
-                <small className={styles['form__label-error']}>
-                  {errors.email}
-                </small>
-                )}
-              </label>
-
-              <label htmlFor="username" className={styles.form__label}>
-                <div className={styles['form__label-text']}>
-                  Username*
-                </div>
-                <input
-                  id="username"
-                  type="text"
-                  className={styles.form__input}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.username}
-                  placeholder="fulano_silva"
-                />
-                {(touched.username && errors.username) && (
-                <small className={styles['form__label-error']}>
-                  {errors.username}
-                </small>
-                )}
-              </label>
-
-              <label htmlFor="password" className={styles.form__label}>
-                <div className={styles['form__label-text']}>
-                  Password*
-                </div>
-                <span className={styles['form__password-input']}>
-                  <input
-                    id="password"
-                    type={isPasswordVisible ? 'text' : 'password'}
-                    className={styles.form__input}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.password}
-                    placeholder="super_secret123"
-                  />
-                  {buttonHideOrShowPassword()}
-                </span>
-                {(touched.password && errors.password) && (
-                <small className={styles['form__label-error']}>
-                  {errors.password}
-                </small>
-                )}
-              </label>
-
-              <label
-                htmlFor="passwordConfirmation"
-                className={styles.form__label}
-              >
-                <div className={styles['form__label-text']}>
-                  Password confirmation*
-                </div>
-                <span className={styles['form__password-input']}>
-                  <input
-                    id="passwordConfirmation"
-                    type={isPasswordVisible ? 'text' : 'password'}
-                    className={styles.form__input}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.passwordConfirmation}
-                    placeholder="super_secret123"
-                  />
-                  {buttonHideOrShowPassword()}
-                </span>
-                {(touched.passwordConfirmation && errors.passwordConfirmation) && (
-                <small className={styles['form__label-error']}>
-                  {errors.passwordConfirmation}
-                </small>
-                )}
-              </label>
+              {fields.map(({
+                id, labelText, placeholder, type,
+              }: Field) => (
+                <label htmlFor={id} key={id} className={styles.form__label}>
+                  <div className={styles['form__label-text']}>
+                    {labelText}
+                  </div>
+                  {(id === 'password' || id === 'passwordConfirmation') ? (
+                    <span className={styles['form__password-input']}>
+                      {renderInput(
+                        { id, type, placeholder },
+                        handleChange,
+                        handleBlur,
+                        values,
+                      )}
+                      {buttonHideOrShowPassword()}
+                    </span>
+                  ) : (renderInput({ id, type, placeholder }, handleChange, handleBlur, values))}
+                  {(touched[id] && errors[id]) && (
+                    <small className={styles['form__label-error']}>
+                      {errors[id]}
+                    </small>
+                  )}
+                </label>
+              ))}
             </form>
           )}
         </Formik>
@@ -164,5 +128,24 @@ export default function SignUp() {
         </small>
       </main>
     </div>
+  );
+}
+
+function renderInput(
+  { id, placeholder, type }: Omit<Field, 'labelText'>,
+  handleChange: any,
+  handleBlur: any,
+  values: SignUpForm,
+) {
+  return (
+    <input
+      id={id}
+      placeholder={placeholder}
+      className={styles.form__input}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      type={type}
+      value={values[id]}
+    />
   );
 }
