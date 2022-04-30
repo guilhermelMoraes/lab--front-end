@@ -66,19 +66,19 @@ export default function SignUp() {
     },
     {
       id: 'username',
-      labelText: 'Username*',
+      labelText: 'Nome de usuário*',
       placeholder: 'fulano_silva',
       type: 'text',
     },
     {
       id: 'password',
-      labelText: 'Password*',
+      labelText: 'Senha*',
       placeholder: 'super_secret#123',
       type: isPasswordVisible ? 'text' : 'password',
     },
     {
       id: 'passwordConfirmation',
-      labelText: 'Password confirmation*',
+      labelText: 'Confirmar senha*',
       placeholder: 'super_secret#123',
       type: isPasswordVisible ? 'text' : 'password',
     },
