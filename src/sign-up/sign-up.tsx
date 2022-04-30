@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { Formik, FormikProps } from 'formik';
 import { useState } from 'react';
 import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
@@ -19,7 +20,7 @@ export default function SignUp() {
       .max(100, 'O nome de usuário deve ter, no máximo, 100 caracteres')
       .required(REQUIRED_FIELD_ERROR_MESSAGE),
     password: string()
-      .min(8, 'A senha deve ter, no mínimo, 4 caracteres')
+      .min(8, 'A senha deve ter, no mínimo, 8 caracteres')
       .max(30, 'A senha deve ter, no máximo, 30 caracteres')
       .required(REQUIRED_FIELD_ERROR_MESSAGE),
     passwordConfirmation: string().required(REQUIRED_FIELD_ERROR_MESSAGE)
@@ -114,11 +115,13 @@ export default function SignUp() {
                       {buttonHideOrShowPassword()}
                     </span>
                   ) : (renderInput({ id, type, placeholder }, handleChange, handleBlur, values))}
-                  {(touched[id] && errors[id]) && (
-                    <small className={styles['form__label-error']}>
-                      {errors[id]}
-                    </small>
-                  )}
+                  <small
+                    className={cx(styles['form__label-error'], {
+                      [styles['form__label-error--visible']]: (touched[id] && errors[id]),
+                    })}
+                  >
+                    {errors[id]}
+                  </small>
                 </label>
               ))}
             </form>

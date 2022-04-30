@@ -30,7 +30,14 @@
 
 .form__label-error {
   color: #ae2012;
-  font-size: 16px;
+  font-size: 14px;
+  visibility: hidden;
+  height: 19px;
+  display: inline-block;
+}
+
+.form__label-error--visible {
+  visibility: visible;
 }
 
 .form__input {
