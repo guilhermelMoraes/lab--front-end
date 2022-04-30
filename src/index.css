@@ -12,6 +12,7 @@ label {
 
 input,
 p,
-small {
+small,
+button {
   font-family: "Segoe UI Regular", sans-serif;
 }

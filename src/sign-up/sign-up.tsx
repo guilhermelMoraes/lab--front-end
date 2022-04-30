@@ -94,7 +94,7 @@ export default function SignUp() {
           validationSchema={formValidationSchema}
         >
           {({
-            values, handleChange, errors, touched, handleBlur, handleSubmit,
+            values, handleChange, errors, touched, handleBlur, handleSubmit, isValid, dirty,
           }: FormikProps<SignUpFormData>) => (
               {fields.map(({
                 id, labelText, placeholder, type,
@@ -123,6 +123,9 @@ export default function SignUp() {
                   </small>
                 </label>
               ))}
+              <button type="submit" className={styles['form__submit-button']} disabled={!isValid || !dirty}>
+                CRIAR
+              </button>
             </form>
           )}
         </Formik>
