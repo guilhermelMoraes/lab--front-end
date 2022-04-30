@@ -1,4 +1,4 @@
-type SignUpForm = {
+type SignUpFormData = {
   email: string;
   username: string;
   password: string;
@@ -6,10 +6,10 @@ type SignUpForm = {
 }
 
 export type Field = {
-  id: keyof SignUpForm;
+  id: keyof SignUpFormData;
   labelText: string;
   placeholder: string;
   type: string;
 }
 
-export default SignUpForm;
+export default SignUpFormData;

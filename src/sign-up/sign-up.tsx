@@ -6,7 +6,7 @@ import {
   object, ref, string,
 } from 'yup';
 import styles from './sign-up.module.css';
-import SignUpForm, { Field } from './types';
+import SignUpFormData, { Field } from './types';
 
 export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export default function SignUp() {
       .oneOf([ref('password')], 'Senha e confirmação são diferentes'),
   });
 
-  const formInitialValues: SignUpForm = {
+  const formInitialValues: SignUpFormData = {
     email: '',
     username: '',
     password: '',
@@ -94,9 +94,8 @@ export default function SignUp() {
           validationSchema={formValidationSchema}
         >
           {({
-            values, handleChange, errors, touched, handleBlur,
-          }: FormikProps<SignUpForm>) => (
-            <form>
+            values, handleChange, errors, touched, handleBlur, handleSubmit,
+          }: FormikProps<SignUpFormData>) => (
               {fields.map(({
                 id, labelText, placeholder, type,
               }: Field) => (
@@ -139,7 +138,7 @@ function renderInput(
   { id, placeholder, type }: Omit<Field, 'labelText'>,
   handleChange: any,
   handleBlur: any,
-  values: SignUpForm,
+  values: SignUpFormData,
 ) {
   return (
     <input
