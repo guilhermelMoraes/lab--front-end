@@ -1,3 +1,5 @@
+/* stylelint-disable at-rule-empty-line-before */
+
 .sign-up {
   height: 100vh;
   display: flex;
@@ -11,7 +13,7 @@
 }
 
 .sign-up__main {
-  background-color: #ededed;
+  background-color: #f8fafc;
   border-radius: 2px;
   padding: 16px;
   width: 25%;
@@ -22,10 +24,10 @@
 .sign-up__title {
   text-align: center;
   margin-bottom: 32px;
+  @apply text-3xl font-bold;
 }
 
 .form__label {
-  font-family: "Segoe UI Bold", sans-serif;
   display: block;
   margin-bottom: 8px;
 }
@@ -35,7 +37,7 @@
 }
 
 .form__label-error {
-  color: #ae2012;
+  color: #b91c1c;
   font-size: 14px;
   visibility: hidden;
   height: 19px;
@@ -51,6 +53,19 @@
   width: 100%;
   font-weight: bold;
   margin-bottom: 8px;
+  background-color: #15803d;
+  color: #f8fafc;
+  border-radius: 2px;
+  transition: all 0.2s ease-in-out;
+}
+
+.form__submit-button:hover {
+  background-color: #166534;
+}
+
+.form__submit-button:disabled {
+  background-color: #86efac;
+  color: #000;
 }
 
 .form__input {
@@ -60,6 +75,9 @@
   padding: 0 8px;
   display: block;
   width: 100%;
+  background-color: #fafafa;
+  border: 1px solid;
+  border-radius: 2px;
 }
 
 .form__password-input {
