@@ -5,7 +5,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
-import SignUpService from './services/sign-up.service';
+import SignUpService from './sign-up.service';
 import styles from './sign-up.module.css';
 import SignUpFormData, { Field } from './types';
 

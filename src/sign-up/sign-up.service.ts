@@ -1,5 +1,5 @@
 import axios from 'axios';
-import SignUpFormData from '../types';
+import SignUpFormData from './types';
 
 type SubmitNewUserResponse = {
   status: 'SUCCESS' | 'ALREADY-EXIST' | 'ERROR';
