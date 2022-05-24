@@ -9,7 +9,7 @@ export default function SignUp() {
         <title>THE LAB - Sign Up</title>
       </Helmet>
       <div className={styles['sign-up']}>
-        <main className={`${styles['sign-up__form-wrapper']} container bg-body rounded shadow-lg p-3`}>
+        <main className={`${styles['sign-up__form-wrapper']} container bg-body rounded shadow-lg p-3 m-sm-3`}>
           <h1 className="text-center mb-4">THE LAB 🧪</h1>
           <SignUpForm />
         </main>
