@@ -11,7 +11,7 @@ import SignUpFormData, { Field } from './types';
 
 const REQUIRED_FIELD_ERROR_MESSAGE: string = 'Campo obrigatório';
 
-export default function SignUpForm() {
+export default function LocalStrategy() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const formValidationSchema = object({
