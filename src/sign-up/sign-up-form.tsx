@@ -1,4 +1,3 @@
-import axios from 'axios';
 import cx from 'classnames';
 import {
   Formik, FormikHelpers, FormikProps, FormikValues,
@@ -6,6 +5,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
+import SignUpService from './services/sign-up.service';
 import styles from './sign-up.module.css';
 import SignUpFormData, { Field } from './types';
 
@@ -32,13 +32,13 @@ export default function SignUpForm() {
     {
       id: 'email',
       labelText: 'E-mail',
-      placeholder: 'fulano@email.com',
+      placeholder: 'fulano@mail.com',
       type: 'email',
     },
     {
       id: 'username',
       labelText: 'Nome de usuário',
-      placeholder: 'fulano_silva',
+      placeholder: 'Fulano Silva',
       type: 'text',
     },
     {
@@ -62,18 +62,22 @@ export default function SignUpForm() {
     passwordConfirmation: '',
   };
 
-  const onSubmit = async (
+  const createNewUser = async (
     payload: FormikValues,
     { resetForm }: FormikHelpers<SignUpFormData>,
   ): Promise<void> => {
-    try {
-      const { data } = await axios.post<string>('http://localhost:8000/user/sign-up', payload);
-      toast.success(data);
-      resetForm();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data as string);
-      }
+    const creationResponse = await SignUpService.submitNewUser(payload as SignUpFormData);
+    switch (creationResponse.status) {
+      case 'SUCCESS':
+        toast.success(creationResponse.data as string);
+        resetForm();
+        break;
+      case 'ALREADY-EXIST':
+        toast.warn(creationResponse.data as string);
+        break;
+      case 'ERROR':
+        toast.error(creationResponse.data as string);
+        break;
     }
   };
 
@@ -81,7 +85,7 @@ export default function SignUpForm() {
     <>
       <Formik
         initialValues={formInitialValues}
-        onSubmit={onSubmit}
+        onSubmit={createNewUser}
         validationSchema={formValidationSchema}
       >
         {(formikProps: FormikProps<SignUpFormData>) => (
