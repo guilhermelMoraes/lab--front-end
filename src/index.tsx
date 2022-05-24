@@ -1,11 +1,11 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
 import ReactDOM from 'react-dom/client';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import AppRouter from './router';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

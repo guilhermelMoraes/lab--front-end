@@ -3,8 +3,6 @@ import cx from 'classnames';
 import {
   Formik, FormikHelpers, FormikProps, FormikValues,
 } from 'formik';
-import { useState } from 'react';
-import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
 import styles from './sign-up.module.css';
@@ -13,8 +11,6 @@ import SignUpFormData, { Field } from './types';
 const REQUIRED_FIELD_ERROR_MESSAGE: string = 'Campo obrigatório';
 
 export default function SignUpForm() {
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-
   const formValidationSchema = object({
     email: string().email('E-mail inválido').required(REQUIRED_FIELD_ERROR_MESSAGE),
     username: string()
@@ -32,27 +28,27 @@ export default function SignUpForm() {
   const fields: Field[] = [
     {
       id: 'email',
-      labelText: 'E-mail*',
+      labelText: 'E-mail',
       placeholder: 'fulano@email.com',
-      type: 'text',
+      type: 'email',
     },
     {
       id: 'username',
-      labelText: 'Nome de usuário*',
+      labelText: 'Nome de usuário',
       placeholder: 'fulano_silva',
       type: 'text',
     },
     {
       id: 'password',
-      labelText: 'Senha*',
+      labelText: 'Senha',
       placeholder: 'super_secret#123',
-      type: isPasswordVisible ? 'text' : 'password',
+      type: 'password',
     },
     {
       id: 'passwordConfirmation',
-      labelText: 'Confirmar senha*',
+      labelText: 'Confirmar senha',
       placeholder: 'super_secret#123',
-      type: isPasswordVisible ? 'text' : 'password',
+      type: 'password',
     },
   ];
 
@@ -62,25 +58,6 @@ export default function SignUpForm() {
     password: '',
     passwordConfirmation: '',
   };
-
-  const buttonHideOrShowPassword = () => (
-    <button
-      type="button"
-      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-      aria-label={
-        isPasswordVisible ? 'Hide password' : 'Show password'
-      }
-      className={styles['password-input__button']}
-    >
-      {isPasswordVisible ? (
-        <BsEyeSlashFill
-          className={styles['password-input__svg']}
-        />
-      ) : (
-        <BsEyeFill className={styles['password-input__svg']} />
-      )}
-    </button>
-  );
 
   const onSubmit = async (
     payload: FormikValues,
@@ -94,7 +71,6 @@ export default function SignUpForm() {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data as string);
       }
-      toast.error((error as Error).message);
     }
   };
 
@@ -110,66 +86,42 @@ export default function SignUpForm() {
             {fields.map(({
               id, labelText, placeholder, type,
             }: Field) => (
-              <label htmlFor={id} key={id} className={styles.form__label}>
-                <div className={styles['form__label-text']}>
-                  {labelText}
-                </div>
-                {(id === 'password' || id === 'passwordConfirmation') ? (
-                  <span className={styles['form__password-input']}>
-                    {renderInput(
-                      { id, type, placeholder },
-                      formikProps.handleChange,
-                      formikProps.handleBlur,
-                      formikProps.values,
-                    )}
-                    {buttonHideOrShowPassword()}
-                  </span>
-                ) : (
-                  renderInput({
-                    id, type, placeholder,
-                  }, formikProps.handleChange, formikProps.handleBlur, formikProps.values)
-                )}
+              <div className="form-floating mb-3" key={id}>
+                <input
+                  type={type}
+                  id={id}
+                  className={cx('form-control', {
+                    'is-invalid': (formikProps.touched[id] && formikProps.errors[id]),
+                    'is-valid': (formikProps.touched[id] && (formikProps.isValid || formikProps.dirty)),
+                  })}
+                  placeholder={placeholder}
+                  value={formikProps.values[id]}
+                  onChange={formikProps.handleChange}
+                  onBlur={formikProps.handleBlur}
+                />
+                <label htmlFor={id}>{labelText}</label>
                 <small
-                  className={cx(styles['form__label-error'], {
-                    [styles['form__label-error--visible']]: (formikProps.touched[id] && formikProps.errors[id]),
+                  className={cx('text-danger', [styles['form__error-message']], {
+                    [styles['form__error-message--visible']]: formikProps.errors[id] && formikProps.touched[id],
                   })}
                 >
                   {formikProps.errors[id]}
                 </small>
-              </label>
+              </div>
             ))}
             <button
               type="submit"
-              className={styles['form__submit-button']}
+              className={`btn btn-primary fw-bold ${styles['form__submit-button']}`}
               disabled={!formikProps.isValid || !formikProps.dirty || formikProps.isSubmitting}
             >
-              {formikProps.isSubmitting ? 'ENVIANDO' : 'CRIAR'}
+              {formikProps.isSubmitting ? <div className="spinner-border" role="status" /> : 'CRIAR'}
             </button>
           </form>
         )}
       </Formik>
       <small>
-        *Campos obrigatórios
+        Todos os campos são obrigatórios
       </small>
     </>
-  );
-}
-
-function renderInput(
-  { id, placeholder, type }: Omit<Field, 'labelText'>,
-  handleChange: any,
-  handleBlur: any,
-  values: SignUpFormData,
-) {
-  return (
-    <input
-      id={id}
-      placeholder={placeholder}
-      className={styles.form__input}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      type={type}
-      value={values[id]}
-    />
   );
 }
