@@ -2070,6 +2070,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/google.accounts@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.1.tgz#1cddd6b4b3ccf0a07c7282e3ca6f8d4390d3ce6e"
+  integrity sha512-US+e68xwCoiieDI1HYVCbk8PHCB6GIHyWUSBxpFAbTYtmvtnXLzbBusZrz3HCYAOBijkZebSNGNkc746Qz3R7Q==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
