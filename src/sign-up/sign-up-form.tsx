@@ -3,6 +3,7 @@ import cx from 'classnames';
 import {
   Formik, FormikHelpers, FormikProps, FormikValues,
 } from 'formik';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
 import styles from './sign-up.module.css';
@@ -11,6 +12,8 @@ import SignUpFormData, { Field } from './types';
 const REQUIRED_FIELD_ERROR_MESSAGE: string = 'Campo obrigatório';
 
 export default function SignUpForm() {
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
   const formValidationSchema = object({
     email: string().email('E-mail inválido').required(REQUIRED_FIELD_ERROR_MESSAGE),
     username: string()
@@ -42,13 +45,13 @@ export default function SignUpForm() {
       id: 'password',
       labelText: 'Senha',
       placeholder: 'super_secret#123',
-      type: 'password',
+      type: isPasswordVisible ? 'text' : 'password',
     },
     {
       id: 'passwordConfirmation',
       labelText: 'Confirmar senha',
       placeholder: 'super_secret#123',
-      type: 'password',
+      type: isPasswordVisible ? 'text' : 'password',
     },
   ];
 
@@ -109,6 +112,21 @@ export default function SignUpForm() {
                 </small>
               </div>
             ))}
+
+            <div className="form-check form-switch mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="is-password-visible"
+                checked={isPasswordVisible}
+                onChange={() => setIsPasswordVisible(!isPasswordVisible)}
+              />
+              <label className="form-check-label" htmlFor="is-password-visible">
+                {isPasswordVisible ? 'Ocultar ' : 'Mostrar '}
+                senha
+              </label>
+            </div>
+
             <button
               type="submit"
               className={`btn btn-primary fw-bold ${styles['form__submit-button']}`}

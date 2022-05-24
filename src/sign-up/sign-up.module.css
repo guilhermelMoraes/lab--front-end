@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: radial-gradient(circle, #fff0 12%, #000 100%), url("./images/background-image.jpg");
+  background-image: radial-gradient(circle, #fff0 12%, #000 100%), url("./assets/images/background-image.jpg");
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
