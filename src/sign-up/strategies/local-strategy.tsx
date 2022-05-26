@@ -5,13 +5,16 @@ import {
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
-import SignUpService from './sign-up.service';
-import styles from './sign-up.module.css';
-import SignUpFormData, { Field } from './types';
+import styles from '../sign-up.module.css';
+import SignUpFormData, { Field, SubmitNewUserResponse } from '../types';
 
 const REQUIRED_FIELD_ERROR_MESSAGE: string = 'Campo obrigatório';
 
-export default function LocalStrategy() {
+type LocalStrategyProps = {
+  submitNewUser(userData: SignUpFormData): Promise<SubmitNewUserResponse>
+};
+
+export default function LocalStrategy({ submitNewUser }: LocalStrategyProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const formValidationSchema = object({
@@ -66,13 +69,13 @@ export default function LocalStrategy() {
     payload: FormikValues,
     { resetForm }: FormikHelpers<SignUpFormData>,
   ): Promise<void> => {
-    const creationResponse = await SignUpService.submitNewUser(payload as SignUpFormData);
+    const creationResponse = await submitNewUser(payload as SignUpFormData);
     switch (creationResponse.status) {
       case 'SUCCESS':
         toast.success(creationResponse.data as string);
         resetForm();
         break;
-      case 'ALREADY-EXIST':
+      case 'ALREADY-EXISTS':
         toast.warn(creationResponse.data as string);
         break;
       case 'ERROR':

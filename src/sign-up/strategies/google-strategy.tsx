@@ -1,7 +1,29 @@
 import { useEffect, useRef } from 'react';
+import SignUpFormData, { SubmitNewUserResponse } from '../types';
 
-export default function GoogleStrategy() {
+type GoogleStrategyProps = {
+  submitNewUser(userData: SignUpFormData): Promise<SubmitNewUserResponse>
+};
+
+export default function GoogleStrategy({ submitNewUser }: GoogleStrategyProps) {
   const googleAuthButtonWrapper = useRef(null);
+
+  const parseJwt = (token: string): void => {
+    const base64Url: string = token.split('.')[1];
+    const base64: string = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      Buffer.from(base64, 'base64')
+        .toString()
+        .split('')
+        .map((c: string): string => {
+          const opa: string = `00${c.charCodeAt(0).toString(16)}`;
+          return `%${opa.slice(-2)}`;
+        })
+        .join(''),
+    );
+
+    console.log(JSON.parse(jsonPayload));
+  };
 
   useEffect(() => {
     function createGoogleSignInScript(): void {
@@ -17,7 +39,7 @@ export default function GoogleStrategy() {
     function setupGoogleAuth(): void {
       window.google.accounts.id.initialize({
         client_id: process.env.REACT_APP_GCP_OAUTH2_CLIENT_ID as string,
-        callback: (credentialResponse) => console.log(credentialResponse.credential),
+        callback: (credentialResponse) => parseJwt(credentialResponse.credential),
       });
 
       if (googleAuthButtonWrapper.current) {
