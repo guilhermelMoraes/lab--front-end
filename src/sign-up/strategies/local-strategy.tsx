@@ -1,152 +1,255 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import cx from 'classnames';
-import {
-  Formik, FormikHelpers, FormikProps, FormikValues,
-} from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { object, ref, string } from 'yup';
-import styles from '../sign-up.module.css';
-import SignUpFormData, { Field, SubmitNewUserResponse } from '../types';
+import style from '../sign-up.module.css';
+import LocalSignUpData, { FullName, SubmitNewUserResponse } from '../types';
 
-const REQUIRED_FIELD_ERROR_MESSAGE: string = 'Campo obrigatório';
+type SignUpFormData = Omit<LocalSignUpData, 'fullName'> & FullName;
 
 type LocalStrategyProps = {
-  submitNewUser(userData: SignUpFormData): Promise<SubmitNewUserResponse>
+  submitNewUser(userData: LocalSignUpData): Promise<SubmitNewUserResponse>;
 };
 
 export default function LocalStrategy({ submitNewUser }: LocalStrategyProps) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [passwordInputVisible, setPasswordInputVisible] = useState(false);
 
-  const formValidationSchema = object({
-    email: string().email('E-mail inválido').required(REQUIRED_FIELD_ERROR_MESSAGE),
-    username: string()
-      .min(4, 'O nome de usuário deve ter, no mínimo, 4 caracteres')
-      .max(100, 'O nome de usuário deve ter, no máximo, 100 caracteres')
-      .required(REQUIRED_FIELD_ERROR_MESSAGE),
-    password: string()
-      .min(8, 'A senha deve ter, no mínimo, 8 caracteres')
-      .max(30, 'A senha deve ter, no máximo, 30 caracteres')
-      .required(REQUIRED_FIELD_ERROR_MESSAGE),
-    passwordConfirmation: string().required(REQUIRED_FIELD_ERROR_MESSAGE)
-      .oneOf([ref('password')], 'Senha e confirmação são diferentes'),
-  });
-
-  const fields: Field[] = [
-    {
-      id: 'email',
-      labelText: 'E-mail',
-      placeholder: 'fulano@mail.com',
-      type: 'email',
-    },
-    {
-      id: 'username',
-      labelText: 'Nome de usuário',
-      placeholder: 'Fulano Silva',
-      type: 'text',
-    },
-    {
-      id: 'password',
-      labelText: 'Senha',
-      placeholder: 'super_secret#123',
-      type: isPasswordVisible ? 'text' : 'password',
-    },
-    {
-      id: 'passwordConfirmation',
-      labelText: 'Confirmar senha',
-      placeholder: 'super_secret#123',
-      type: isPasswordVisible ? 'text' : 'password',
-    },
-  ];
-
-  const formInitialValues: SignUpFormData = {
+  const initialValues: SignUpFormData = {
     email: '',
-    username: '',
+    firstName: '',
+    surname: '',
     password: '',
     passwordConfirmation: '',
   };
 
+  const validationSchema = object({
+    email: string()
+      .required('E-mail is a required property')
+      .email("E-mail should follow the pattern 'username@domain.TLD'"),
+    firstName: string()
+      .required('First name is a required property')
+      .matches(/^[a-zA-Z\s]*$/, 'Only letters are allowed for the first name')
+      .min(5, 'First name should have at least 5 chars')
+      .max(45, 'First name should have max 45 chars'),
+    surname: string()
+      .required('Surname is a required property')
+      .matches(/^[a-zA-Z\s]*$/, 'Only letters are allowed for the surname')
+      .min(5, 'Surname should have at least 5 chars')
+      .max(45, 'Surname should have max 45 chars'),
+    password: string()
+      .required('Password is a required property')
+      .min(8, 'Password should have at least 8 chars')
+      .max(60, 'Surname should have at least 60 chars'),
+    passwordConfirmation: string()
+      .required('Password confirmation is a required property')
+      .min(8, 'Password confirmation should have at least 8 chars')
+      .max(60, 'Password confirmation should have at least 60 chars')
+      .oneOf([ref('password')], "Confirmation don't match password"),
+  });
+
   const createNewUser = async (
-    payload: FormikValues,
-    { resetForm }: FormikHelpers<SignUpFormData>,
+    values: SignUpFormData,
+    { setFieldError, resetForm }: FormikHelpers<SignUpFormData>,
   ): Promise<void> => {
-    const creationResponse = await submitNewUser(payload as SignUpFormData);
-    switch (creationResponse.status) {
-      case 'SUCCESS':
-        toast.success(creationResponse.data as string);
-        resetForm();
-        break;
-      case 'ALREADY-EXISTS':
-        toast.warn(creationResponse.data as string);
-        break;
-      case 'ERROR':
-        toast.error(creationResponse.data as string);
-        break;
+    const submissionResponse = await submitNewUser({
+      email: values.email,
+      fullName: {
+        firstName: values.firstName,
+        surname: values.surname,
+      },
+      password: values.password,
+      passwordConfirmation: values.passwordConfirmation,
+    });
+
+    if (submissionResponse.status === 'ALREADY-EXIST') {
+      setFieldError('email', submissionResponse.data);
+    }
+
+    if (submissionResponse.status === 'ERROR') {
+      toast.error(submissionResponse.data);
+    }
+
+    if (submissionResponse.status === 'SUCCESS') {
+      toast.success('User successfully created');
+      resetForm();
     }
   };
 
   return (
-    <>
-      <Formik
-        initialValues={formInitialValues}
-        onSubmit={createNewUser}
-        validationSchema={formValidationSchema}
-      >
-        {(formikProps: FormikProps<SignUpFormData>) => (
-          <form onSubmit={formikProps.handleSubmit}>
-            {fields.map(({
-              id, labelText, placeholder, type,
-            }: Field) => (
-              <div className="form-floating mb-3" key={id}>
-                <input
-                  type={type}
-                  id={id}
-                  className={cx('form-control', {
-                    'is-invalid': (formikProps.touched[id] && formikProps.errors[id]),
-                    'is-valid': (formikProps.touched[id] && (formikProps.isValid || formikProps.dirty)),
-                  })}
-                  placeholder={placeholder}
-                  value={formikProps.values[id]}
-                  onChange={formikProps.handleChange}
-                  onBlur={formikProps.handleBlur}
-                />
-                <label htmlFor={id}>{labelText}</label>
-                <small
-                  className={cx('text-danger', [styles['form__error-message']], {
-                    [styles['form__error-message--visible']]: formikProps.errors[id] && formikProps.touched[id],
-                  })}
-                >
-                  {formikProps.errors[id]}
-                </small>
-              </div>
-            ))}
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={createNewUser}
+    >
+      {({
+        values,
+        touched,
+        errors,
+        isValid,
+        isSubmitting,
+        dirty,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+      }: FormikProps<SignUpFormData>) => (
+        <form onSubmit={handleSubmit}>
+          <div className="form-floating mb-3">
+            <input
+              id="e-mail--input"
+              name="email"
+              type="email"
+              className={cx('form-control', {
+                'is-invalid': touched.email && errors?.email,
+                'is-valid': touched.email && (isValid || dirty),
+              })}
+              placeholder="john.doe@mail.com"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+              disabled={isSubmitting}
+            />
+            <label htmlFor="e-mail--input">E-mail</label>
+            <small
+              className={`${style['sign-up-form__error-message']} text-danger`}
+            >
+              {touched.email && errors?.email}
+            </small>
+          </div>
 
-            <div className="form-check form-switch mb-3">
+          <div className="input-group justify-content-between mb-3">
+            <div
+              className={`${style['sign-up-form__input--stretch']} form-floating`}
+            >
               <input
-                className="form-check-input"
-                type="checkbox"
-                id="is-password-visible"
-                checked={isPasswordVisible}
-                onChange={() => setIsPasswordVisible(!isPasswordVisible)}
+                id="first-name--input"
+                name="firstName"
+                type="text"
+                className={cx('form-control', {
+                  'is-invalid': touched.firstName && errors?.firstName,
+                  'is-valid': touched.firstName && (isValid || dirty),
+                })}
+                placeholder="John"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.firstName}
+                disabled={isSubmitting}
               />
-              <label className="form-check-label" htmlFor="is-password-visible">
-                {isPasswordVisible ? 'Ocultar ' : 'Mostrar '}
-                senha
-              </label>
+              <label htmlFor="first-name--input">First name</label>
+              <small
+                className={`${style['sign-up-form__error-message']} text-danger`}
+              >
+                {touched.firstName && errors?.firstName}
+              </small>
             </div>
 
-            <button
-              type="submit"
-              className={`btn btn-primary fw-bold ${styles['form__submit-button']}`}
-              disabled={!formikProps.isValid || !formikProps.dirty || formikProps.isSubmitting}
+            <div
+              className={`${style['sign-up-form__input--stretch']} form-floating`}
             >
-              {formikProps.isSubmitting ? <div className="spinner-border" role="status" /> : 'CRIAR'}
-            </button>
-          </form>
-        )}
-      </Formik>
-      <small>
-        Todos os campos são obrigatórios
-      </small>
-    </>
+              <input
+                id="surname--input"
+                name="surname"
+                type="text"
+                className={cx('form-control', {
+                  'is-invalid': touched.surname && errors?.surname,
+                  'is-valid': touched.surname && (isValid || dirty),
+                })}
+                placeholder="Doe Johnson"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.surname}
+                disabled={isSubmitting}
+              />
+              <label htmlFor="surname--input">Surname</label>
+              <small
+                className={`${style['sign-up-form__error-message']} text-danger`}
+              >
+                {touched.surname && errors?.surname}
+              </small>
+            </div>
+          </div>
+
+          <div className="form-floating mb-3">
+            <input
+              id="password--input"
+              name="password"
+              type={passwordInputVisible ? 'text' : 'password'}
+              className={cx('form-control', {
+                'is-invalid': touched.password && errors?.password,
+                'is-valid': touched.password && (isValid || dirty),
+              })}
+              placeholder="secret_123#"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.password}
+              disabled={isSubmitting}
+            />
+            <label htmlFor="password--input">Password</label>
+            <small
+              className={`${style['sign-up-form__error-message']} text-danger`}
+            >
+              {touched.password && errors?.password}
+            </small>
+          </div>
+
+          <div className="form-floating mb-3">
+            <input
+              id="password-confirmation--input"
+              name="passwordConfirmation"
+              type={passwordInputVisible ? 'text' : 'password'}
+              className={cx('form-control', {
+                'is-invalid':
+                  touched.passwordConfirmation && errors?.passwordConfirmation,
+                'is-valid': touched.passwordConfirmation && (isValid || dirty),
+              })}
+              placeholder="secret_123#"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.passwordConfirmation}
+              disabled={isSubmitting}
+            />
+            <label htmlFor="password-confirmation--input">
+              Password confirmation
+            </label>
+            <small
+              className={`${style['sign-up-form__error-message']} text-danger`}
+            >
+              {touched.passwordConfirmation && errors?.passwordConfirmation}
+            </small>
+          </div>
+
+          <div className="form-check form-switch mb-3">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="set-password-visible"
+              checked={passwordInputVisible}
+              onChange={() => setPasswordInputVisible(!passwordInputVisible)}
+              disabled={isSubmitting}
+            />
+            <label className="form-check-label" htmlFor="set-password-visible">
+              {passwordInputVisible ? 'Hide ' : 'Show '}
+              password
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            className={`${style['sign-up__submit-button']} btn btn-primary btn-lg`}
+            disabled={!isValid || !dirty || isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            ) : (
+              'Submit'
+            )}
+          </button>
+        </form>
+      )}
+    </Formik>
   );
 }

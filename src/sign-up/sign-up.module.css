@@ -3,7 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: radial-gradient(circle, #fff0 12%, #000 100%), url("./assets/images/background-image.jpg");
+  background-image: radial-gradient(circle, #fff0 12%, #000 100%),
+    url('./assets/images/background-image.jpg');
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -14,21 +15,16 @@
   max-width: 650px;
 }
 
-.sign-up__title-logo {
-  max-height: 40px;
+.sign-up-form__input--stretch {
+  width: 50%;
 }
 
-.form__submit-button {
-  width: 100%;
-}
-
-.form__error-message {
-  visibility: hidden;
-
-  /* height: 19px; */
+.sign-up-form__error-message {
   display: inline-block;
 }
 
-.form__error-message--visible {
-  visibility: visible;
+.sign-up__submit-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

@@ -1,15 +1,18 @@
-type SignUpFormData = {
+export type FullName = {
+  firstName: string;
+  surname: string;
+};
+
+type LocalSignUpData = {
   email: string;
-  username: string;
+  fullName: FullName;
   password: string;
   passwordConfirmation: string;
-}
+};
 
-export type Field = {
-  id: keyof SignUpFormData;
-  labelText: string;
-  placeholder: string;
-  type: string;
-}
+export type SubmitNewUserResponse = {
+  status: 'SUCCESS' | 'ALREADY-EXIST' | 'ERROR';
+  data?: string;
+};
 
-export default SignUpFormData;
+export default LocalSignUpData;
