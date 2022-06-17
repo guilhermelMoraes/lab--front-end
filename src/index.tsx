@@ -1,20 +1,20 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import AppRouter from './router';
+import AppRoutes from './router';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
-  <React.StrictMode>
-    <AppRouter />
-    <ToastContainer />
-  </React.StrictMode>,
+  <StrictMode>
+    <AppRoutes />
+    <ToastContainer transition={Slide} />
+  </StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function
